@@ -55,18 +55,17 @@ class Seolit
 
 		$return = curl_exec($this->ch);
 		$result = json_decode($return);
-		$res    = $result->result;
 
-		return $res;
+		return $result;
 	}
 }
 
 // API token
-$token = 'c51f6ea0d1c9efed7c445a4a76804a';
+$token = 'your-token';
 // Project's ID
 $project_id = 50;
-// Accounts IDs array
-$networks = json_encode([7853, 8206, 5473]);
+// Accounts' IDs array
+$networks = json_encode([10, 11, 12]);
 // Title of message
 $title = 'Первое сообщение, размещённое через API';
 // Text of message
@@ -83,4 +82,10 @@ $postDate = strtotime('Monday next week');
 $files = ['testimage.jpg', 'testimage.jpg'];
 
 $seolit = new Seolit($token);
-echo $seolit->publish($project_id, $title, $text, $url, $urlImage, $tags, $postDate, $networks, $files);
+$res = $seolit->publish($project_id, $title, $text, $url, $urlImage, $tags, $postDate, $networks, $files);
+echo $res->result . "\n<br>\n";
+if (isset($res->messages)) {
+	foreach ($res->messages as $message) {
+		echo $message->type . ' => ' . $message->message . "\n<br>\n";
+	}
+}
